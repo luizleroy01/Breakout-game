@@ -3,75 +3,29 @@ const canva = document.getElementById("canvas1");
 //pegando o context, 2d pois o jogo será 2d
 const ctx = canva.getContext("2d");
 
-CANVAS_WIDTH = canva.width = 950;
-CANVAS_HEIGHT = canva.height = 750;
+const CANVAS_WIDTH = canva.width = 950;
+const CANVAS_HEIGHT = canva.height = 750;
 const BLOCK_WIDTH = 75;
 const BLOCK_HEIGHT = 50;
 
+import { Bullet } from "./entities/Bullet.js";
+import { Blocks } from "./entities/Blocks.js";
+import { Player } from "./entities/Player.js";
 
-//classe Bullet para o objeto que quebrará os os blocos
-class Bullet{
-    constructor(){
-        this.image = new Image();
-        this.image.src = "bola.png"
-        this.x = 0;
-        this.y = 0;
-        this.width = 50;
-        this.height = 30;
-        this.velX = 2.5;
-        this.velY = 1.8;
-        this.spriteWidth = 40;
-        this.spriteHeight = 20;
-    }
-    movement(){
-        //incrementa as cooerdenadas x e y do objeto
-        this.x += this.velX;
-        this.y += this.velY;
-        if(this.x + this.width > canva.width ){
-           this.velX *= -1;
-        }
-        if(this.y + this.height > canva.height){
-            this.velY *= -1;
-        }
-        if(this.x < 0){
-            this.velX *= -1;
-        }
-        if(this.y < 0 ){
-            this.velY *= -1;
-        }
-        
-    }
-    draw(){
-        //desenha a bullet no retangulo
-        ctx.drawImage(this.image,0,0,this.spriteWidth,this.spriteHeight,this.x,this.y,this.width,this.height);
-    }
-}
 
-//classe para os blocos que serão destruidos
-class Blocks{
-    constructor(value,x,y){
-        this.value = value;
-        this.width = BLOCK_WIDTH;
-        this.height = BLOCK_HEIGHT;
-        this.x = x;
-        this.y = y;
-    }
-    drawBlock(color){
-        ctx.fillStyle = color;
-        ctx.fillRect(this.x,this.y,this.width,this.height);
-    }
-    
-    
-}
 const bullet = new Bullet();
 const yellowBlocks = [];
 const redBlocks = [];
 const blueBlocks = [];
 const greenBlocks = [];
-var position = 0;
-var distance = 5;
+const player = new Player();
 
-for(let i =  0 ; i < 15 ; i++){
+var position = 0;
+var distance = 4.5;
+
+
+
+for(let i =  0 ; i < 12 ; i++){
     //blocos amarelos
     yellowBlocks.push(new Blocks(2,position,0));
     
@@ -94,6 +48,12 @@ function animate(){
     //apagar a posição anterior da bullet e redesenhar em uma nova posição
     ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
 
+    //desenha o player
+    player.drawPlayer();
+
+    //movimentar o player
+    player.move();
+
     //desenha os blocos amarelos
     yellowBlocks.forEach(blocks =>{blocks.drawBlock("#FFFF00");});
     //desenha os blocos vermelhos
@@ -108,3 +68,42 @@ function animate(){
     requestAnimationFrame(animate);
 }
 animate();
+
+//função responsável por checar a colisão entre a bullet e o bloco e excluir
+//os blocos
+function checkCollision(){
+
+    //colisão com os blocos verdes
+    greenBlocks.forEach(blocks =>{
+        if(bullet.x > (blocks.x + blocks.width) ||
+            (bullet.x + bullet.width) < blocks.x ||
+            bullet.y > (blocks.y + blocks.height) ||
+            (bullet.y + bullet.height) < blocks.y){
+                //não houve colisão
+                //wconsole.log("nao colidiu");
+            }else{
+                //houve colisão
+                //inverte a velocidade vertical da bullet
+                bullet.velY *= -1;
+                //busca o indice do bloco que a bullet colidiu e o 
+                //exclui utilizando a função splice
+                let index = greenBlocks.indexOf(blocks);
+                greenBlocks.splice(index,1);
+            }
+            
+    });
+            if(bullet.x > (player.x + player.width) ||
+                (bullet.x + bullet.width) < player.x ||
+                bullet.y > (player.y + player.height) ||
+                (bullet.y + bullet.height) < player.y){
+                //não houve colisão com o player
+                //console.log("sem colisão com o player");
+
+            }else{
+                //inverte a velocidade vertical da bullet
+                bullet.velY *= -1;
+            }
+    requestAnimationFrame(checkCollision);
+}
+checkCollision();
+
