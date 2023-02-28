@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="https://kit.fontawesome.com/0a044cf2ff.js" crossorigin="anonymous"></script>
         <meta charset = "utf-8"/>
         <meta author = "Luiz Eduardo Leroy"/>
         <meta description = "Classical Breakout game developed with JavaScript"/>
-        <link href = "style.css" rel = "stylesheet"/>
+        <link href = "estilo/style.css" rel = "stylesheet"/>
         <title>Breakout Game</title>
     </head>
     <body>
         <canvas id = "canvas1"></canvas>
+        <div class = "placar">
+            <h1>Points: <span id = "pontuacao"></span>0</h1>
+            <div class = "botoes">
+                <button id = "movEsquerda"><img src = "images/esquerda.svg"></button>
+                <button id = "movDireita"  ><img src = "images/direita.svg" /></button>
+            </div>
+        </div>
         <script type = "module" src = "script.js" ></script>
     </body>
 </html>

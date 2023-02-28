@@ -7,6 +7,7 @@ const CANVAS_WIDTH = canva.width = 950;
 const CANVAS_HEIGHT = canva.height = 750;
 const BLOCK_WIDTH = 75;
 const BLOCK_HEIGHT = 50;
+var placarJogo = 0;
 
 import { Bullet } from "./entities/Bullet.js";
 import { Blocks } from "./entities/Blocks.js";
@@ -51,8 +52,7 @@ function animate(){
     //desenha o player
     player.drawPlayer();
 
-    //movimentar o player
-    player.move();
+    
 
     //desenha os blocos amarelos
     yellowBlocks.forEach(blocks =>{blocks.drawBlock("#FFFF00");});
@@ -87,11 +87,62 @@ function checkCollision(){
                 bullet.velY *= -1;
                 //busca o indice do bloco que a bullet colidiu e o 
                 //exclui utilizando a função splice
+                placarJogo += blocks.value;
+                document.getElementById('pontuacao').innerHTML = placarJogo;
                 let index = greenBlocks.indexOf(blocks);
                 greenBlocks.splice(index,1);
             }
             
     });
+    //colisão com os blocos azuis
+    blueBlocks.forEach(blocks =>{
+        if(bullet.x > (blocks.x + blocks.width) ||
+            (bullet.x + bullet.width) < blocks.x ||
+            bullet.y > (blocks.y + blocks.height) ||
+            (bullet.y + bullet.height) < blocks.y){
+                //nada ocorre
+            }else{
+                bullet.velY *= -1;
+                placarJogo += blocks.value;
+                document.getElementById('pontuacao').innerHTML = placarJogo;
+                let index = blueBlocks.indexOf(blocks);
+                blueBlocks.splice(index,1);
+            }
+            
+    });
+    //colisão com os blocos vermelhos
+    redBlocks.forEach(blocks =>{
+        if(bullet.x > (blocks.x + blocks.width) ||
+            (bullet.x + bullet.width) < blocks.x ||
+            bullet.y > (blocks.y + blocks.height) ||
+            (bullet.y + bullet.height) < blocks.y){
+                //nada ocorre
+            }else{
+                bullet.velY *= -1;
+                placarJogo += blocks.value;
+                document.getElementById('pontuacao').innerHTML = placarJogo;
+                let index = redBlocks.indexOf(blocks);
+                redBlocks.splice(index,1);
+            }
+            
+    });
+    //colisão com os blocos amarelos
+    yellowBlocks.forEach(blocks =>{
+        if(bullet.x > (blocks.x + blocks.width) ||
+            (bullet.x + bullet.width) < blocks.x ||
+            bullet.y > (blocks.y + blocks.height) ||
+            (bullet.y + bullet.height) < blocks.y){
+                //nada ocorre
+            }else{
+                bullet.velY *= -1;
+                placarJogo += blocks.value;
+                document.getElementById('pontuacao').innerHTML = placarJogo;
+                let index = yellowBlocks.indexOf(blocks);
+                yellowBlocks.splice(index,1);
+            }
+            
+    });
+
             if(bullet.x > (player.x + player.width) ||
                 (bullet.x + bullet.width) < player.x ||
                 bullet.y > (player.y + player.height) ||
@@ -106,4 +157,31 @@ function checkCollision(){
     requestAnimationFrame(checkCollision);
 }
 checkCollision();
+
+function blockCollision(blocks){
+ // fazer...
+ // função que recebe um array de blocos e verifica se houve colisão com a bullet
+}
+function movePlayer(){
+    var direita = document.getElementById('movDireita');
+    var esquerda = document.getElementById('movEsquerda');
+
+    direita.addEventListener('click',function(event){
+        player.moveDir();
+        direita.removeEventListener('click');
+    })
+    
+    esquerda.addEventListener('click',function(event){
+        player.movEsq();
+    })
+    requestAnimationFrame(movePlayer);
+}
+
+movePlayer();
+
+
+
+
+
+
 
