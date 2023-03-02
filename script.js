@@ -8,6 +8,7 @@ const CANVAS_HEIGHT = canva.height = 750;
 const BLOCK_WIDTH = 75;
 const BLOCK_HEIGHT = 50;
 var placarJogo = 0;
+var playerLife = 3;
 
 import { Bullet } from "./entities/Bullet.js";
 import { Blocks } from "./entities/Blocks.js";
@@ -45,6 +46,7 @@ for(let i =  0 ; i < 12 ; i++){
 
 //animação para movimentação da bullet
 function animate(){
+    
     //loop para movimentação da bullet e desenhar os blocos na tela
     //apagar a posição anterior da bullet e redesenhar em uma nova posição
     ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
@@ -65,6 +67,8 @@ function animate(){
  
     bullet.movement();
     bullet.draw();
+    looseLife();
+    
     requestAnimationFrame(animate);
 }
 animate();
@@ -162,26 +166,42 @@ function blockCollision(blocks){
  // fazer...
  // função que recebe um array de blocos e verifica se houve colisão com a bullet
 }
-function movePlayer(){
-    var direita = document.getElementById('movDireita');
-    var esquerda = document.getElementById('movEsquerda');
 
+function movePlayer(){
+    let direita = document.getElementById('movDireita');
+    let esquerda = document.getElementById('movEsquerda');
+    
     direita.addEventListener('click',function(event){
         player.moveDir();
-        direita.removeEventListener('click');
+        
     })
     
     esquerda.addEventListener('click',function(event){
         player.movEsq();
     })
-    requestAnimationFrame(movePlayer);
+    
 }
 
 movePlayer();
 
+function looseLife(){
+    if((bullet.y + bullet.height) > CANVAS_HEIGHT){
+        playerLife--;
+        if(playerLife >= 0){
+            let vida = document.getElementsByClassName('vida')[playerLife];
+            vida.style.display = "none";
+        }
+        
+    }
+}
 
 
-
-
+function show(){
+    if(playerLife < 0){
+        document.getElementsById('looseGame').style.display = "run-in";
+    }
+    requestAnimationFrame(show);
+}
+show();
 
 

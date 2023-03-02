@@ -42,4 +42,21 @@
     height:50px;
     background-color:gold !important;
 }
+#looseGame{
+    background-color:black !important;
+    color:red !important;
+    font-size:50px;
+    text-align: center;
+    z-index:2;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:750px;
+    height:950px;
+    display:none;
+}
+#looseGame h1{
+    margin-top:20%;
+}
 

@@ -11,7 +11,7 @@ export class Player{
         this.y = 700;
         this.width = 90;
         this.height = 15;
-        this.vel = 0.050;
+        this.vel = 35;
     }
     drawPlayer(){
         ctx.fillRect(this.x,this.y,this.width,this.height);
@@ -21,10 +21,12 @@ export class Player{
         if(this.x + this.width < canva_width){
             this.x = this.x + this.vel;
         } 
+        this.drawPlayer();
     }
     movEsq(){
         if(this.x > 0){
             this.x = this.x - this.vel;
         }
+        this.drawPlayer();
     }
 }

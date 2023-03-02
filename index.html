@@ -10,11 +10,19 @@
     </head>
     <body>
         <canvas id = "canvas1"></canvas>
+        <div id = "looseGame" >
+            <h1>VOCÊ MORREU !!!!! HAHAHAHA</h1>
+        </div>
         <div class = "placar">
             <h1>Points: <span id = "pontuacao"></span>0</h1>
+            <div class = "life">
+                <img src = "images/life.png" class = "vida"/>
+                <img src = "images/life.png" class = "vida"/>
+                <img src = "images/life.png" class = "vida"/>
+            </div>
             <div class = "botoes">
-                <button id = "movEsquerda"><img src = "images/esquerda.svg"></button>
-                <button id = "movDireita"  ><img src = "images/direita.svg" /></button>
+                <button id = "movEsquerda" onclick = "movePlayer();"><img src = "images/esquerda.svg"/></button>
+                <button id = "movDireita"><img src = "images/direita.svg"/></button>
             </div>
         </div>
         <script type = "module" src = "script.js" ></script>
