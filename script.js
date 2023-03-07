@@ -46,6 +46,14 @@ for(let i =  0 ; i < 12 ; i++){
 
 //animação para movimentação da bullet
 function animate(){
+    if(playerLife < 0 ){
+        alert('perdeu');
+        let endGame = document.getElementById('looseGame');
+        endGame.style.opacity = 1;
+       
+        return;
+
+    }
     
     //loop para movimentação da bullet e desenhar os blocos na tela
     //apagar a posição anterior da bullet e redesenhar em uma nova posição
@@ -53,8 +61,6 @@ function animate(){
 
     //desenha o player
     player.drawPlayer();
-
-    
 
     //desenha os blocos amarelos
     yellowBlocks.forEach(blocks =>{blocks.drawBlock("#FFFF00");});
@@ -195,13 +201,5 @@ function looseLife(){
     }
 }
 
-
-function show(){
-    if(playerLife < 0){
-        document.getElementsById('looseGame').style.display = "run-in";
-    }
-    requestAnimationFrame(show);
-}
-show();
 
 
