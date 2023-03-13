@@ -12,6 +12,7 @@ export class Player{
         this.width = 90;
         this.height = 15;
         this.vel = 35;
+        
     }
     drawPlayer(){
         ctx.fillRect(this.x,this.y,this.width,this.height);
@@ -29,4 +30,5 @@ export class Player{
         }
         this.drawPlayer();
     }
+    
 }

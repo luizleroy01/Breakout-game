@@ -10,6 +10,10 @@ const BLOCK_HEIGHT = 50;
 var placarJogo = 0;
 var playerLife = 3;
 
+//variável que garante que a bullet colidirá apenas com o primeiro bloco que
+//entrar em contato
+var oneTouchBlock = false;
+
 import { Bullet } from "./entities/Bullet.js";
 import { Blocks } from "./entities/Blocks.js";
 import { Player } from "./entities/Player.js";
@@ -21,10 +25,11 @@ const redBlocks = [];
 const blueBlocks = [];
 const greenBlocks = [];
 const player = new Player();
+const audioBulletTouch = new Audio('./Sounds/bulletToch.mp3');
+audioBulletTouch.play();
 
 var position = 0;
 var distance = 4.5;
-
 
 
 for(let i =  0 ; i < 12 ; i++){
@@ -42,6 +47,7 @@ for(let i =  0 ; i < 12 ; i++){
 
     position = position + BLOCK_WIDTH + distance;
 }
+
 
 
 //animação para movimentação da bullet
@@ -83,27 +89,36 @@ animate();
 //os blocos
 function checkCollision(){
 
+    oneTouchBlock = bullet.touchWallOrPlayer();
+    
     //colisão com os blocos verdes
+    
     greenBlocks.forEach(blocks =>{
         if(bullet.x > (blocks.x + blocks.width) ||
             (bullet.x + bullet.width) < blocks.x ||
             bullet.y > (blocks.y + blocks.height) ||
             (bullet.y + bullet.height) < blocks.y){
                 //não houve colisão
-                //wconsole.log("nao colidiu");
             }else{
                 //houve colisão
                 //inverte a velocidade vertical da bullet
-                bullet.velY *= -1;
-                //busca o indice do bloco que a bullet colidiu e o 
-                //exclui utilizando a função splice
-                placarJogo += blocks.value;
-                document.getElementById('pontuacao').innerHTML = placarJogo;
-                let index = greenBlocks.indexOf(blocks);
-                greenBlocks.splice(index,1);
+                if(!bullet.touchWallOrPlayer()){
+                    audioBulletTouch.play();
+                    bullet.velY *= -1;
+                    bullet.isTouch = true;
+                    //busca o indice do bloco que a bullet colidiu e o 
+                    //exclui utilizando a função splice
+                    placarJogo += blocks.value;
+                    document.getElementById('pontuacao').innerHTML = placarJogo;
+                    let index = greenBlocks.indexOf(blocks);
+                    greenBlocks.splice(index,1);
+                }
+                
             }
             
     });
+
+
     //colisão com os blocos azuis
     blueBlocks.forEach(blocks =>{
         if(bullet.x > (blocks.x + blocks.width) ||
@@ -112,15 +127,23 @@ function checkCollision(){
             (bullet.y + bullet.height) < blocks.y){
                 //nada ocorre
             }else{
-                bullet.velY *= -1;
-                placarJogo += blocks.value;
-                document.getElementById('pontuacao').innerHTML = placarJogo;
-                let index = blueBlocks.indexOf(blocks);
-                blueBlocks.splice(index,1);
+                if(!bullet.touchWallOrPlayer()){
+                    audioBulletTouch.play();
+                    bullet.velY *= -1;
+                    bullet.isTouch = true;
+                    placarJogo += blocks.value;
+                    document.getElementById('pontuacao').innerHTML = placarJogo;
+                    let index = blueBlocks.indexOf(blocks);
+                    blueBlocks.splice(index,1);
+                }
+                
+                
             }
             
     });
     //colisão com os blocos vermelhos
+
+    
     redBlocks.forEach(blocks =>{
         if(bullet.x > (blocks.x + blocks.width) ||
             (bullet.x + bullet.width) < blocks.x ||
@@ -128,14 +151,21 @@ function checkCollision(){
             (bullet.y + bullet.height) < blocks.y){
                 //nada ocorre
             }else{
-                bullet.velY *= -1;
-                placarJogo += blocks.value;
-                document.getElementById('pontuacao').innerHTML = placarJogo;
-                let index = redBlocks.indexOf(blocks);
-                redBlocks.splice(index,1);
+                //quando toca em um bloco
+                if(!bullet.touchWallOrPlayer()){
+                    audioBulletTouch.play();
+                    bullet.velY *= -1;
+                    bullet.isTouch = true;
+                    placarJogo += blocks.value;
+                    document.getElementById('pontuacao').innerHTML = placarJogo;
+                    let index = redBlocks.indexOf(blocks);
+                    redBlocks.splice(index,1);
+                }
+                
             }
             
     });
+    
     //colisão com os blocos amarelos
     yellowBlocks.forEach(blocks =>{
         if(bullet.x > (blocks.x + blocks.width) ||
@@ -144,11 +174,17 @@ function checkCollision(){
             (bullet.y + bullet.height) < blocks.y){
                 //nada ocorre
             }else{
-                bullet.velY *= -1;
-                placarJogo += blocks.value;
-                document.getElementById('pontuacao').innerHTML = placarJogo;
-                let index = yellowBlocks.indexOf(blocks);
-                yellowBlocks.splice(index,1);
+                if(!bullet.touchWallOrPlayer()){
+                    audioBulletTouch.play();
+                    bullet.velY *= -1;
+                    bullet.isTouch = true;
+                    placarJogo += blocks.value;
+                    document.getElementById('pontuacao').innerHTML = placarJogo;
+                    let index = yellowBlocks.indexOf(blocks);
+                    yellowBlocks.splice(index,1);
+                }
+                
+                
             }
             
     });
@@ -162,6 +198,7 @@ function checkCollision(){
 
             }else{
                 //inverte a velocidade vertical da bullet
+                audioBulletTouch.play();
                 bullet.velY *= -1;
             }
     requestAnimationFrame(checkCollision);
